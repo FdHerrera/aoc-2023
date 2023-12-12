@@ -53,6 +53,25 @@ public class DayTwo {
         return round;
     }
 
+    public static int partTwo(List<String> input) {
+        return input.parallelStream()
+                .map(DayTwo::mapGame)
+                .map(DayTwo::minPowerOfSetOfCubes)
+                .reduce(0, Integer::sum);
+    }
+
+    private static int minPowerOfSetOfCubes(Game game) {
+        int minNumberOfRedCubesNecessary = Integer.MIN_VALUE;
+        int minNumberOfGreenCubesNecessary = Integer.MIN_VALUE;
+        int minNumberOfBlueCubesNecessary = Integer.MIN_VALUE;
+        for (Round round : game.rounds) {
+            minNumberOfRedCubesNecessary = Math.max(minNumberOfRedCubesNecessary, round.redCubes);
+            minNumberOfGreenCubesNecessary = Math.max(minNumberOfGreenCubesNecessary, round.greenCubes);
+            minNumberOfBlueCubesNecessary = Math.max(minNumberOfBlueCubesNecessary, round.blueCubes);
+        }
+        return minNumberOfRedCubesNecessary * minNumberOfGreenCubesNecessary * minNumberOfBlueCubesNecessary;
+    }
+
     @ToString
     private static class Game {
         @Getter

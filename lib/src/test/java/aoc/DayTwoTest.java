@@ -12,4 +12,11 @@ class DayTwoTest {
 
         assertThat(actualResult).isEqualTo(2563);
     }
+
+    @Test
+    void testDayTwoPartTwo() {
+        int actualResult = DayTwo.partTwo(readInputFile("daytwo.txt"));
+
+        assertThat(actualResult).isEqualTo(70768);
+    }
 }
