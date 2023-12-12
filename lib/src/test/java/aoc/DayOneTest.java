@@ -8,8 +8,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 class DayOneTest {
     @Test
     void testDayOne() {
-        int actualResult = DayOne.trebuchect(readInputFile("dayone.txt"));
+        int actualResult = DayOne.trebuchet(readInputFile("dayone.txt"));
 
-        assertThat(actualResult).isEqualTo(54951);
+        assertThat(actualResult).isEqualTo(55218);
     }
 }
