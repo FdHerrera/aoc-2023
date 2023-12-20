@@ -7,16 +7,16 @@ import org.junit.jupiter.api.Test;
 
 class DaySixTest {
     @Test
-    void testDayOne() {
+    void testDaySix() {
         int actualResult = DaySix.waitForIt(readInputFile("daysix.txt"));
 
         assertThat(actualResult).isEqualTo(503424);
     }
 
     @Test
-    void testDayOnePartTwo() {
+    void testDaySixPartTwo() {
         int actualResult = DaySix.waitForItPartTwo(readInputFile("daysix.txt"));
 
-        assertThat(actualResult).isEqualTo(71503);
+        assertThat(actualResult).isEqualTo(32607562);
     }
 }
