@@ -11,7 +11,14 @@ class DayEightTest {
     void testDayEight() {
         long actualResult = DayEight.hauntedWasteland(readInputFile("dayeight.txt"));
 
-        assertThat(actualResult).isEqualTo(6L);
+        assertThat(actualResult).isEqualTo(15989L);
+    }
+
+    @Test
+    void testDayEightPartTwo() {
+        long actualResult = DayEight.hauntedWastelandPartTwo(readInputFile("dayeight.txt"));
+
+        assertThat(actualResult).isEqualTo(13830919117339L);
     }
 
 }
