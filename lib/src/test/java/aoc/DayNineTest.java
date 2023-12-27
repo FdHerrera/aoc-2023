@@ -12,4 +12,11 @@ class DayNineTest {
 
         assertThat(actualResult).isEqualTo(1743490457L);
     }
+
+    @Test
+    void testDayNinePartTwo() {
+        long actualResult = DayNine.mirageMaintenancePartTwo(readInputFile("daynine.txt"));
+
+        assertThat(actualResult).isEqualTo(1053L);
+    }
 }
