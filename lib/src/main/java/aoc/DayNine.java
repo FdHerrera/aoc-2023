@@ -13,11 +13,12 @@ public class DayNine {
     public static long mirageMaintenance(List<String> input) {
         return input.parallelStream()
                 .map(DayNine::mapLineSequence)
-                .map(DayNine::calcSequence)
+                .map(DayNine::getSequenceDifferences)
+                .map(DayNine::extrapolateLastDifference)
                 .reduce(0L, Long::sum);
     }
 
-    private static long calcSequence(List<Long> lineSequence) {
+    private static LinkedList<LinkedList<Long>> getSequenceDifferences(List<Long> lineSequence) {
         LinkedList<LinkedList<Long>> differences = new LinkedList<>();
         LinkedList<Long> difference = new LinkedList<>(lineSequence);
         do {
@@ -31,20 +32,41 @@ public class DayNine {
             difference = temp;
         } while (!difference.stream().allMatch(i -> i.equals(0L)));
         differences.addFirst(new LinkedList<>(lineSequence));
-        return extrapolateDifferences(differences);
+        return differences;
     }
 
-    private static long extrapolateDifferences(LinkedList<LinkedList<Long>> differences) {
+    private static long extrapolateLastDifference(LinkedList<LinkedList<Long>> differences) {
         differences.getLast().addLast(0L);
         while (differences.size() > 1) {
             LinkedList<Long> last = differences.pollLast();
-            Long lastNum = last.pollLast();
+            Long lastFromLast = last.pollLast();
             LinkedList<Long> penultimate = differences.peekLast();
             Long lastFromPenultimate = penultimate.peekLast();
-            penultimate.addLast(lastNum + lastFromPenultimate);
+            penultimate.addLast(lastFromLast + lastFromPenultimate);
 
         }
         return differences.pollLast().pollLast();
+    }
+
+    public static long mirageMaintenancePartTwo(List<String> input) {
+        return input.stream()
+                .map(DayNine::mapLineSequence)
+                .map(DayNine::getSequenceDifferences)
+                .map(DayNine::extrapolateFirstDifference)
+                .reduce(0L, Long::sum);
+    }
+
+    private static long extrapolateFirstDifference(LinkedList<LinkedList<Long>> differences) {
+        differences.getLast().addFirst(0L);
+        while (differences.size() > 1) {
+            LinkedList<Long> last = differences.pollLast();
+            Long firstFromLast = last.pollFirst();
+            LinkedList<Long> penultimate = differences.peekLast();
+            Long firstFromPenultimate = penultimate.peekFirst();
+            penultimate.addFirst( firstFromPenultimate - firstFromLast);
+
+        }
+        return differences.pollFirst().pollFirst();
     }
 
     private static List<Long> mapLineSequence(String line) {
