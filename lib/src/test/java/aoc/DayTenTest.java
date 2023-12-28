@@ -12,4 +12,11 @@ class DayTenTest {
 
         assertThat(actualResult).isEqualTo(6956L);
     }
+
+    @Test
+    void testDayTenPartTwo() {
+        long actualResult = DayTen.pipeMazePartTwo(readInputFile("dayten.txt"));
+
+        assertThat(actualResult).isEqualTo(6956L);
+    }
 }

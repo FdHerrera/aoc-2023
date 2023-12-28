@@ -3,8 +3,10 @@ package aoc;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DayTen {
@@ -48,6 +50,56 @@ public class DayTen {
             }
         }
         throw new IllegalArgumentException("Didn't find a pipe pointing to start???");
+    }
+
+    public static long pipeMazePartTwo(List<String> input) {
+        Glyph[][] map = input.stream().map(DayTen::mapLine).toArray(Glyph[][]::new);
+        int[] step = findStart(map);
+        int[] startLocation = new int[]{step[0], step[1]};
+        int[] nextStep = findAPipePointingToStart(map, step);
+        List<int[]> pipesLocations = findPipeLocations(map, step, nextStep);
+        map[startLocation[0]][startLocation[1]] = Glyph.SOUTH_WEST;//TODO find actual shape under start
+        long innerPoints = 0L;
+        Set<Glyph> skippedGlyphs = Set.of(Glyph.HORIZONTAL, Glyph.NORTH_EAST, Glyph.NORTH_WEST);
+        for (int row = 0; row < map.length; row++) {
+            for (int col = 0; col < map[row].length; col++) {
+                int nextPipeWalls = 0;
+                int finalRow = row;
+                int finalCol = col;
+                boolean thisIsWall = pipesLocations.stream().anyMatch(loc -> Arrays.equals(loc, new int[]{finalRow, finalCol}));
+                if (thisIsWall) {
+                    continue;
+                }
+                for (int k = col; k < map.length; k++) {
+                    int finalK = k + 1;
+                    boolean nextIsWall = pipesLocations.stream().anyMatch(loc -> Arrays.equals(loc, new int[]{finalRow, finalK}));
+                    if (nextIsWall && !skippedGlyphs.contains(map[finalRow][finalK])) {
+                        nextPipeWalls++;
+                    }
+                }
+                if (nextPipeWalls % 2 == 1) {
+                    innerPoints++;
+                }
+            }
+        }
+        return innerPoints;
+    }
+
+    private static List<int[]> findPipeLocations(Glyph[][] map, int[] step, int[] nextStep) {
+        List<int[]> pipesLocations = new ArrayList<>();
+        pipesLocations.add(nextStep);
+        Glyph nextGlyph = map[nextStep[0]][nextStep[1]];
+        while (!nextGlyph.equals(Glyph.START)) {
+            int[] comingFrom = new int[]{step[0] - nextStep[0], step[1] - nextStep[1]};
+            int[] nextMove = nextGlyph.nextMove(comingFrom);
+            int nextPositionRow = nextStep[0] + nextMove[0];
+            int nextPositionCol = nextStep[1] + nextMove[1];
+            nextGlyph = map[nextPositionRow][nextPositionCol];
+            step = nextStep;
+            nextStep = new int[]{nextPositionRow, nextPositionCol};
+            pipesLocations.add(nextStep);
+        }
+        return pipesLocations;
     }
 
     private static int[] findStart(Glyph[][] map) {
