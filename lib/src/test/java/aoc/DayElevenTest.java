@@ -12,4 +12,11 @@ class DayElevenTest {
 
         assertThat(actualResult).isEqualTo(9693756L);
     }
+
+    @Test
+    void testDayElevenPartTwo() {
+        long actualResult = DayEleven.cosmicExpansionParTwo(readInputFile("dayeleven.txt"));
+
+        assertThat(actualResult).isEqualTo(717878258016L);
+    }
 }
